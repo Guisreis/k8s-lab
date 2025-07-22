@@ -1,4 +1,4 @@
-name: Deploy to EKS via Docker Hub
+name: Deploy do EKS via Docker Hub
 
 on:
   push:
@@ -27,26 +27,25 @@ jobs:
           docker build -t guilota/app-k8s-lab:latest .
           docker push guilota/app-k8s-lab:latest
 
-      - name: Configure AWS credentials
+      - name: Configurar AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
-      - name: Update kubeconfig for EKS
+      - name: Update kubeconfig EKS
         run: |
           aws eks --region us-east-2 update-kubeconfig --name gsreis-cluster
 
-      - name: Apply Namespace manifest
-        run: |
-          kubectl apply -f k8s/namespace.yaml
+      - name: Criar Namespace
+        run: kubectl apply -f k8s/namespace.yaml
 
-      - name: Wait for Namespace to be established
-        run: |
-          kubectl wait --for=condition=established namespace/lab-k8s --timeout=60s
+      - name: Criar ConfigMap
+        run: kubectl apply -f k8s/configmap.yaml
 
-      - name: Apply remaining manifests
-        run: |
-          # Aplica todos os manifests exceto o namespace.yaml
-          find k8s/ -type f ! -name 'namespace.yaml' -exec kubectl apply -f {} \;
+      - name: Criar Deployment
+        run: kubectl apply -f k8s/deployment.yaml
+
+      - name: Criar Service
+        run: kubectl apply -f k8s/service.yaml
