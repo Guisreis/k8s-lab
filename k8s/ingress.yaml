@@ -4,10 +4,14 @@ metadata:
   name: app-k8s-ingress
   namespace: lab-k8s
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:335180047327:certificate/172b82f8-93a4-484d-b41a-23c1f35dc85b
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
 spec:
   rules:
-    - host: app.local
+    - host: gsreis-lab.daredemsp.com
       http:
         paths:
           - path: /
