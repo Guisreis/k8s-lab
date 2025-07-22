@@ -17,7 +17,7 @@ spec:
         - name: app-k8s
           image: guilota/app-k8s-lab
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           env:
             - name: MESSAGE
               valueFrom:
