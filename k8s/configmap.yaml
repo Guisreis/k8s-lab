@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: lab-k8s
+data:
+  message: "Deploy no Kubernetes funcionando!"

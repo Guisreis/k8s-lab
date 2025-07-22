@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-k8s
+  namespace: lab-k8s
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-k8s
+  template:
+    metadata:
+      labels:
+        app: app-k8s
+    spec:
+      containers:
+        - name: app-k8s
+          image: guilota/app-k8s-lab
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: message
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
